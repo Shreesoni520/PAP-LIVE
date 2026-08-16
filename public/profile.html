@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil | Reporta Évora</title>
+<link href="/assets/img/favicon.png" rel="icon">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@300;400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+<link href="/assets/css/main.css" rel="stylesheet">
+</head>
+<body class="index-page">
+<header id="header" class="header d-flex align-items-center fixed-top"><div id="site-header"></div></header>
+<main class="main"><section class="section" style="padding-top:120px;padding-bottom:60px"><div class="container" data-aos="fade-up"><div class="section-title text-center mb-4"><h2>Perfil</h2></div><div id="profile-box" class="col-lg-6 mx-auto"></div></div></section></main>
+<div id="site-footer"></div>
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<div id="preloader"></div>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/aos/aos.js"></script>
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/site-layout.js"></script>
+
+</body></html><script>
+(async()=>{
+ const me=await fetch('/api/auth/me',{credentials:'same-origin'}).then(r=>r.json());
+ if(!me.loggedIn){location.href='/login.html?next=/profile.html';return;}
+ document.getElementById('profile-box').innerHTML='<div class="card border-0 shadow-sm p-4" style="border-radius:18px"><h4>'+me.user.nome+'</h4><p class="text-muted mb-0">ID: '+me.user.id+'</p><a class="btn btn-outline-primary btn-sm rounded-pill mt-3" href="/seguranca.html">Segurança</a></div>';
+})();
+</script>

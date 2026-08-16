@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verificação em 2 passos | Reporta Évora</title>
+<link href="/assets/img/favicon.png" rel="icon">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@300;400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+<link href="/assets/css/main.css" rel="stylesheet">
+</head>
+<body class="index-page">
+<header id="header" class="header d-flex align-items-center fixed-top"><div id="site-header"></div></header>
+<main class="main"><section class="section" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding-top:90px;padding-bottom:40px;background:radial-gradient(circle at top,#1f2933 0,#020617 45%,#000 100%)">
+<div class="container" data-aos="fade-up"><div class="row justify-content-center"><div class="col-md-7 col-lg-5">
+<div class="text-center mb-4"><h2 class="fw-semibold" style="color:#f9fafb;font-size:1.7rem">Verificação em 2 passos</h2></div>
+<div class="card border-0" style="border-radius:18px;box-shadow:0 20px 55px rgba(15,23,42,.7)"><div class="card-body p-4 p-md-5">
+<div id="form-erro" class="alert alert-danger py-2 d-none"></div>
+<div id="form-ok" class="alert alert-success py-2 d-none"></div>
+<form id="v2fa-form"><div class="mb-3"><label class="form-label">Código de 6 dígitos</label><input name="code" class="form-control" required maxlength="6"></div>
+<button type="submit" class="btn btn-primary w-100 rounded-pill mt-2">Verificar</button>
+</form>
+</div></div></div></div></div></section></main>
+<div id="site-footer"></div>
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<div id="preloader"></div>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/aos/aos.js"></script>
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/site-layout.js"></script>
+
+</body></html><script>
+document.getElementById('v2fa-form').addEventListener('submit', async (e)=>{
+ e.preventDefault(); const fd=new FormData(e.target); const erro=document.getElementById('form-erro'); erro.classList.add('d-none');
+ try{ const r=await fetch('/api/auth/verify-2fa',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({code:fd.get('code')})}); const d=await r.json(); if(!d.ok){erro.textContent=d.message;erro.classList.remove('d-none');return;} location.href=d.redirect||'/'; }catch{erro.textContent='Erro de rede.';erro.classList.remove('d-none');}
+});
+</script>

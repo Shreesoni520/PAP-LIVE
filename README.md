@@ -1,52 +1,45 @@
-# Reporta Évora (Next.js)
+# Reporta Évora (HTML + Node.js)
 
-Urban occurrence reporting platform for Évora — migrated from PHP to **Next.js + TypeScript + React + Tailwind**.
+No PHP. Frontend is HTML/CSS/JS. Backend is Node.js + Express + MySQL.
 
-## Stack
+## Folder layout
 
-- Next.js 15 (App Router)
-- TypeScript
-- React
-- Tailwind CSS
-- MySQL (`pap` database)
-- iron-session, bcryptjs, nodemailer
-
-## Local development
-
-1. Install [Node.js 20+](https://nodejs.org/)
-2. Keep MySQL running (XAMPP MySQL is fine)
-3. Copy env file:
-
-```bash
-cp .env.example .env.local
+```
+PAP-LIVE/
+├── public/                 ← everything the browser opens
+│   ├── index.html          ← home
+│   ├── login.html
+│   ├── signup.html
+│   ├── …                   ← other public pages
+│   ├── admin/              ← admin pages + admin assets
+│   │   ├── index.html
+│   │   ├── login.html
+│   │   └── assets/
+│   ├── assets/             ← site CSS / JS / images
+│   └── uploads/            ← user photos
+├── server/                 ← Node backend
+│   ├── index.js            ← starts the app
+│   ├── lib/                ← db, mail, password, utils
+│   └── routes/             ← /api/... endpoints
+├── package.json
+├── .env                    ← DB settings (not committed)
+└── README.md
 ```
 
-4. Fill DB credentials and a long `SESSION_SECRET` (32+ chars)
-5. Install and run:
+## Run
+
+1. Start **MySQL** in XAMPP.
+2. Check `.env` (database `pap`).
+3. Then:
 
 ```bash
 npm install
-npm run dev
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+- Site: http://localhost:3000/
+- Admin: http://localhost:3000/admin/login.html
 
-## Vercel deploy
+## Author
 
-This repo is connected to GitHub → Vercel. Every push to `main` rebuilds the site.
-
-### Required Vercel environment variables
-
-Set these in **Vercel → Project → Settings → Environment Variables**:
-
-- `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASS`, `DB_NAME`
-- `APP_URL` (your Vercel URL, e.g. `https://your-app.vercel.app`)
-- `SESSION_SECRET` (long random string)
-- `ADMIN_EMAIL`
-- Optional: `SMTP_*`, `TWILIO_*`
-
-**Important:** Vercel cannot reach `localhost` MySQL on your PC. Use a cloud MySQL (PlanetScale, Railway, Aiven, etc.) or a tunnel for production.
-
-## Legacy PHP
-
-Old PHP files remain in the repo for reference during migration and will be removed once feature parity is complete. The live app is Next.js only.
+Krishna Soni

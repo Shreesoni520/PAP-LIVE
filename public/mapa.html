@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa | Reporta Évora</title>
+<link href="/assets/img/favicon.png" rel="icon">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@300;400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+<link href="/assets/css/main.css" rel="stylesheet">
+</head>
+<body class="index-page">
+<header id="header" class="header d-flex align-items-center fixed-top"><div id="site-header"></div></header>
+<main class="main"><section class="section" style="padding-top:100px;padding-bottom:40px"><div class="container">
+<div class="section-title text-center mb-3"><h2>Mapa 2D</h2><p>Ocorrências e espaços verdes em Évora.</p></div>
+<div id="map" style="height:70vh;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.15)"></div>
+</div></section></main>
+<div id="site-footer"></div>
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<div id="preloader"></div>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/aos/aos.js"></script>
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/site-layout.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+const map=L.map('map').setView([38.5719,-7.9097],14);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
+async function load(url, color, label){
+ const d=await fetch(url).then(r=>r.json());
+ (d.data||[]).forEach(o=>{
+  if(!o.latitude||!o.longitude) return;
+  L.circleMarker([Number(o.latitude),Number(o.longitude)],{radius:7,color,fillColor:color,fillOpacity:.7})
+   .bindPopup('<strong>'+label+'</strong><br>'+(o.descricao||o.nome||o.especie||'')+'<br>'+(o.place_name||'')).addTo(map);
+ });
+}
+load('/api/map/ocorrencias','#dc2626','Ocorrência');
+load('/api/map/ocorrencias-estrada','#ea580c','Estrada');
+load('/api/map/arvores','#16a34a','Árvore');
+</script>
+</body></html>

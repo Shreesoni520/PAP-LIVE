@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="pt-PT"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard Admin</title>
+<link href="/Admin/assets/css/app.css" rel="stylesheet">
+<link href="/Admin/assets/css/bootstrap.css" rel="stylesheet">
+</head><body><div id="app"><div id="main" class="layout-horizontal"><header class="mb-3"><div class="container"><nav class="navbar navbar-expand navbar-light navbar-top"><a href="/admin/" class="navbar-brand">Reporta Évora Admin</a>
+<div class="ms-auto"><span id="who" class="me-3"></span><button id="logout" class="btn btn-sm btn-outline-danger">Sair</button></div></nav></div></header>
+<div class="container"><div class="page-heading"><h3>Dashboard</h3></div>
+<div class="row" id="stats"></div>
+<div class="row mt-4"><div class="col-12"><div class="card"><div class="card-header"><h4>Listagens rápidas</h4></div><div class="card-body">
+<select id="entity" class="form-select mb-3" style="max-width:280px"><option value="ocorrencias">Ocorrências</option><option value="ocorrencias-estrada">Ocorrências estrada</option><option value="arvores">Árvores</option><option value="noticias">Notícias</option><option value="contact">Contactos</option><option value="users-public">Utilizadores públicos</option><option value="users">Utilizadores internos</option></select>
+<div class="table-responsive"><table class="table table-striped" id="tbl"><thead></thead><tbody></tbody></table></div>
+</div></div></div></div></div></div></div>
+<script>
+async function boot(){
+ const me=await fetch('/api/admin/me',{credentials:'same-origin'}).then(r=>r.json());
+ if(!me.loggedIn){location.href='/admin/login.html';return;}
+ document.getElementById('who').textContent=me.user.username+(me.user.isAdmin?' (admin)':'');
+ const dash=await fetch('/api/admin/dashboard',{credentials:'same-origin'}).then(r=>r.json());
+ const s=dash.stats||{};
+ document.getElementById('stats').innerHTML=Object.entries(s).map(([k,v])=>'<div class="col-6 col-lg-2"><div class="card"><div class="card-body"><h6>'+k+'</h6><h3>'+v+'</h3></div></div></div>').join('');
+ await loadList();
+}
+async function loadList(){
+ const ent=document.getElementById('entity').value;
+ const d=await fetch('/api/admin/list/'+ent,{credentials:'same-origin'}).then(r=>r.json());
+ const rows=d.data||[];
+ const keys=rows[0]?Object.keys(rows[0]).slice(0,6):[];
+ document.querySelector('#tbl thead').innerHTML='<tr>'+keys.map(k=>'<th>'+k+'</th>').join('')+'<th></th></tr>';
+ document.querySelector('#tbl tbody').innerHTML=rows.map(r=>'<tr>'+keys.map(k=>'<td>'+String(r[k]??'').slice(0,80)+'</td>').join('')+'<td><button class="btn btn-sm btn-danger" data-id="'+r.id+'">Apagar</button></td></tr>').join('');
+ document.querySelectorAll('#tbl button').forEach(btn=>btn.onclick=async()=>{
+  if(!confirm('Apagar #'+btn.dataset.id+'?')) return;
+  await fetch('/api/admin/item/'+ent+'/'+btn.dataset.id,{method:'DELETE',credentials:'same-origin'});
+  loadList();
+ });
+}
+document.getElementById('entity').onchange=loadList;
+document.getElementById('logout').onclick=async()=>{await fetch('/api/admin/logout',{method:'POST',credentials:'same-origin'});location.href='/admin/login.html';};
+boot();
+</script></body></html>

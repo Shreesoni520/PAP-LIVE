@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contacto | Reporta Évora</title>
+<link href="/assets/img/favicon.png" rel="icon">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@300;400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+<link href="/assets/css/main.css" rel="stylesheet">
+</head>
+<body class="index-page">
+<header id="header" class="header d-flex align-items-center fixed-top"><div id="site-header"></div></header>
+<main class="main"><section class="section" style="padding-top:120px;padding-bottom:60px"><div class="container" data-aos="fade-up"><div class="section-title text-center mb-4"><h2>Contacto</h2><p>Envie-nos uma mensagem.</p></div>
+<div class="row justify-content-center"><div class="col-lg-7">
+<div id="c-erro" class="alert alert-danger d-none"></div><div id="c-ok" class="alert alert-success d-none"></div>
+<form id="contact-form" class="card border-0 shadow-sm p-4" style="border-radius:18px">
+<div class="mb-3" id="guest-fields"><label class="form-label">Nome</label><input name="nome" class="form-control"><label class="form-label mt-2">Email</label><input type="email" name="email" class="form-control"></div>
+<div class="mb-3"><label class="form-label">Assunto</label><input name="assunto" class="form-control"></div>
+<div class="mb-3"><label class="form-label">Mensagem</label><textarea name="mensagem" class="form-control" rows="5" required></textarea></div>
+<button class="btn btn-primary rounded-pill">Enviar</button>
+</form></div></div></div></section></main>
+<div id="site-footer"></div>
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<div id="preloader"></div>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/aos/aos.js"></script>
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/site-layout.js"></script>
+
+</body></html><script>
+(async()=>{ const me=await fetch('/api/auth/me',{credentials:'same-origin'}).then(r=>r.json()); if(me.loggedIn) document.getElementById('guest-fields').classList.add('d-none'); })();
+document.getElementById('contact-form').addEventListener('submit', async (e)=>{
+ e.preventDefault(); const fd=new FormData(e.target); const erro=document.getElementById('c-erro'); const ok=document.getElementById('c-ok');
+ erro.classList.add('d-none'); ok.classList.add('d-none');
+ const r=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({nome:fd.get('nome'),email:fd.get('email'),assunto:fd.get('assunto'),mensagem:fd.get('mensagem')})});
+ const d=await r.json(); if(!d.ok){erro.textContent=d.message;erro.classList.remove('d-none');} else {ok.textContent=d.message;ok.classList.remove('d-none'); e.target.reset();}
+});
+</script>

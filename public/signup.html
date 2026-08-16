@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criar Conta | Reporta Évora</title>
+<link href="/assets/img/favicon.png" rel="icon">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@300;400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+<link href="/assets/css/main.css" rel="stylesheet">
+</head>
+<body class="index-page">
+<header id="header" class="header d-flex align-items-center fixed-top"><div id="site-header"></div></header>
+<main class="main"><section class="section" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding-top:90px;padding-bottom:40px;background:radial-gradient(circle at top,#1f2933 0,#020617 45%,#000 100%)">
+<div class="container" data-aos="fade-up"><div class="row justify-content-center"><div class="col-md-7 col-lg-5">
+<div class="text-center mb-4"><h2 class="fw-semibold" style="color:#f9fafb;font-size:1.7rem">Criar Conta</h2></div>
+<div class="card border-0" style="border-radius:18px;box-shadow:0 20px 55px rgba(15,23,42,.7)"><div class="card-body p-4 p-md-5">
+<div id="form-erro" class="alert alert-danger py-2 d-none"></div>
+<div id="form-ok" class="alert alert-success py-2 d-none"></div>
+<form id="signup-form"><div class="mb-3"><label class="form-label">Nome</label><input name="nome" class="form-control" required></div>
+<div class="mb-3"><label class="form-label">Utilizador</label><input name="username" class="form-control" required></div>
+<div class="mb-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control" required></div>
+<div class="mb-3"><label class="form-label">Telefone</label><input name="phone" class="form-control"></div>
+<div class="mb-3"><label class="form-label">Data de nascimento</label><input type="date" name="birthday" class="form-control" required></div>
+<div class="mb-3"><label class="form-label">Género</label><select name="gender" class="form-select" required><option value="male">Masculino</option><option value="female">Feminino</option><option value="other">Outro</option></select></div>
+<div class="mb-3"><label class="form-label">Palavra-passe</label><input type="password" name="password" class="form-control" required minlength="8"></div>
+<div class="mb-3 d-none" id="verify-box"><label class="form-label">Código de verificação</label><input name="code" class="form-control" maxlength="6"></div>
+<button type="submit" class="btn btn-primary w-100 rounded-pill mt-2">Registar</button>
+</form><p class="text-center mt-3 mb-0 small"><a href="/login.html">Já tem conta? Entrar</a></p>
+</div></div></div></div></div></section></main>
+<div id="site-footer"></div>
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<div id="preloader"></div>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/aos/aos.js"></script>
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/site-layout.js"></script>
+
+</body></html><script>
+let step='form'; let emailPending='';
+document.getElementById('signup-form').addEventListener('submit', async (e)=>{
+ e.preventDefault();
+ const fd=new FormData(e.target);
+ const erro=document.getElementById('form-erro'); const ok=document.getElementById('form-ok');
+ erro.classList.add('d-none'); ok.classList.add('d-none');
+ try{
+  if(step==='form'){
+   const r=await fetch('/api/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'start',nome:fd.get('nome'),username:fd.get('username'),email:fd.get('email'),phone:fd.get('phone'),birthday:fd.get('birthday'),gender:fd.get('gender'),password:fd.get('password')})});
+   const d=await r.json();
+   if(!d.ok){erro.textContent=d.message;erro.classList.remove('d-none');return;}
+   step='verify'; emailPending=d.email||fd.get('email');
+   document.getElementById('verify-box').classList.remove('d-none');
+   ok.textContent=d.message; ok.classList.remove('d-none');
+  } else {
+   const r=await fetch('/api/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'verify',email:emailPending,code:fd.get('code')})});
+   const d=await r.json();
+   if(!d.ok){erro.textContent=d.message;erro.classList.remove('d-none');return;}
+   location.href=d.redirect||'/login.html';
+  }
+ }catch{erro.textContent='Erro de rede.';erro.classList.remove('d-none');}
+});
+</script>

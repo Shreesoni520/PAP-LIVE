@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notícias | Reporta Évora</title>
+<link href="/assets/img/favicon.png" rel="icon">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@300;400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+<link href="/assets/css/main.css" rel="stylesheet">
+</head>
+<body class="index-page">
+<header id="header" class="header d-flex align-items-center fixed-top"><div id="site-header"></div></header>
+<main class="main"><section class="section" style="padding-top:120px;padding-bottom:60px"><div class="container" data-aos="fade-up"><div class="section-title text-center mb-4"><h2>Notícias</h2><p>Atualizações sobre Évora.</p></div>
+<div class="row gy-4" id="news-list"></div></div></section></main>
+<div id="site-footer"></div>
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<div id="preloader"></div>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/aos/aos.js"></script>
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/site-layout.js"></script>
+
+</body></html><script>
+(async()=>{
+ const box=document.getElementById('news-list');
+ const d=await fetch('/api/noticias').then(r=>r.json());
+ if(!d.ok||!d.noticias.length){box.innerHTML='<p class="text-center text-muted">Sem notícias.</p>';return;}
+ box.innerHTML=d.noticias.map(n=>'<div class="col-md-4"><div class="card h-100 border-0 shadow-sm" style="border-radius:18px;overflow:hidden"><img src="'+(n.imagem_lista||'/assets/img/blog/blog-post-1.webp')+'" style="height:200px;object-fit:cover" alt=""><div class="card-body"><small class="text-muted">'+(n.data_formatada||'')+'</small><h5>'+n.titulo+'</h5><p class="small text-muted">'+(n.resumo_curto||'')+'</p><a href="/noticia.html?id='+n.id+'">Ler</a></div></div></div>').join('');
+})();
+</script>
