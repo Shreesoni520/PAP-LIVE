@@ -33,3 +33,8 @@ debug.php
 
 # Logs
 *.log
+
+# Next.js
+/.next/
+/out/
+
