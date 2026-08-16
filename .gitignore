@@ -1,0 +1,35 @@
+# Nested duplicate of this project (do not publish twice)
+/PAP-master/
+
+# Secrets (real file stays outside project at C:\xampp\secrets\pap-secrets.php)
+pap-secrets.php
+.env
+.env.*
+!.env.example
+
+# Composer
+/vendor/
+composer.phar
+
+# Node
+node_modules/
+Admin/node_modules/
+
+# User uploads (photos, reports, etc.)
+/uploads/
+Admin/uploads/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Temp / debug
+_tmp_*
+debug.php
+
+# Logs
+*.log

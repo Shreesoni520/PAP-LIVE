@@ -1,0 +1,13 @@
+{
+    "require": {
+        "php": ">=8.0",
+        "twilio/sdk": "^8.11",
+        "dompdf/dompdf": "^3.1"
+    },
+    "config": {
+        "platform": {
+            "php": "8.0.30"
+        },
+        "preferred-install": "dist"
+    }
+}
