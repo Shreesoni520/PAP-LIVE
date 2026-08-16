@@ -8,12 +8,16 @@ export default function PlaceholderPage({
   description: string;
 }) {
   return (
-    <section className="section">
-      <h1 className="section-title">{title}</h1>
-      <p className="section-lead">{description}</p>
-      <Link href="/" className="btn-secondary">
-        Voltar ao início
-      </Link>
+    <section className="section" style={{ paddingTop: "8rem" }}>
+      <div className="container">
+        <div className="section-title">
+          <h2>{title}</h2>
+          <p>{description}</p>
+        </div>
+        <Link href="/" className="btn btn-primary btn-sm rounded-pill px-3">
+          Voltar ao início
+        </Link>
+      </div>
     </section>
   );
 }
